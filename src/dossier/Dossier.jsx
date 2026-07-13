@@ -1,7 +1,8 @@
 import {
   NAME, ROLE_LABEL, ROLE_SUMMARY, CONTACT, CREDENTIALS, SUMMARY_PARAGRAPHS,
-  EXPERIENCE, COMPETENCIES, PROJECTS, EDUCATION, VIDEOS,
+  EXPERIENCE, COMPETENCIES, PROJECTS, SECURITY_LAB, EDUCATION, VIDEOS,
 } from './data';
+import { useEffect, useState } from 'react';
 import './dossier.css';
 
 function VideoPanel({ src, className }) {
@@ -23,6 +24,7 @@ function Masthead() {
           <a href="#credentials">Credentials</a>
           <a href="#experience">Experience</a>
           <a href="#work">Work</a>
+          <a href="#security-lab">Lab</a>
           <a href="#contact">Contact</a>
         </nav>
       </div>
@@ -56,32 +58,74 @@ function Hero() {
 }
 
 function Credentials() {
+  const [activeCertificate, setActiveCertificate] = useState(null);
+
+  useEffect(() => {
+    if (!activeCertificate) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setActiveCertificate(null);
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    document.body.classList.add('certificate-viewer-open');
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape);
+      document.body.classList.remove('certificate-viewer-open');
+    };
+  }, [activeCertificate]);
+
   return (
-    <section className="wrap seals" id="credentials">
-      <div className="seals__head">
-        <span className="eyebrow">Verified Credentials</span>
-        <span className="status"><i className="dot" />Active</span>
-      </div>
-      <div className="seals__grid">
-        {CREDENTIALS.map((c) => (
-          <div className="seal-card" data-tone={c.tone} key={c.id}>
-            <div className="seal-card__top">
-              <div className={`stamp ${c.pending ? 'pending' : ''}`}><span>{c.stamp}</span></div>
-              <div className="seal-card__body">
-                <strong>{c.name}</strong>
-                <div className="id">{c.idLine}</div>
-                <p>{c.desc}</p>
+    <>
+      <section className="wrap seals" id="credentials">
+        <div className="seals__head">
+          <span className="eyebrow">Verified Credentials</span>
+          <span className="status"><i className="dot" />Active</span>
+        </div>
+        <div className="seals__grid">
+          {CREDENTIALS.map((c) => (
+            <div className="seal-card" data-tone={c.tone} key={c.id}>
+              <div className="seal-card__top">
+                <div className={`stamp ${c.pending ? 'pending' : ''}`}><span>{c.stamp}</span></div>
+                <div className="seal-card__body">
+                  <strong>{c.name}</strong>
+                  <div className="id">{c.idLine}</div>
+                  <p>{c.desc}</p>
+                </div>
               </div>
+              {(c.document || c.img || c.verifyUrl) && (
+                <div className="seal-card__links">
+                  {c.verifyUrl && <a href={c.verifyUrl} target="_blank" rel="noreferrer">Verify credential &#8594;</a>}
+                  {(c.document || c.img) && (
+                    <button type="button" onClick={() => setActiveCertificate({ name: c.name, url: c.img || c.document })}>
+                      View certificate &#8594;
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
-            {c.img && (
-              <div className="seal-card__links">
-                <a href={c.img} target="_blank" rel="noreferrer">View certificate &#8594;</a>
+          ))}
+        </div>
+      </section>
+      {activeCertificate && (
+        <div className="certificate-viewer" role="dialog" aria-modal="true" aria-label={`${activeCertificate.name} certificate viewer`} onMouseDown={(event) => event.target === event.currentTarget && setActiveCertificate(null)}>
+          <div className="certificate-viewer__panel">
+            <div className="certificate-viewer__head">
+              <div>
+                <span className="eyebrow">Credential file</span>
+                <strong>{activeCertificate.name}</strong>
               </div>
-            )}
+              <button type="button" onClick={() => setActiveCertificate(null)} aria-label="Close certificate viewer">Close</button>
+            </div>
+            <div className="certificate-viewer__document">
+              {activeCertificate.url.endsWith('.pdf') ? (
+                <iframe src={`${activeCertificate.url}#toolbar=0&navpanes=0&scrollbar=1`} title={`${activeCertificate.name} certificate`} />
+              ) : (
+                <img src={activeCertificate.url} alt={`${activeCertificate.name} certificate`} />
+              )}
+            </div>
           </div>
-        ))}
-      </div>
-    </section>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -89,9 +133,22 @@ function Summary() {
   return (
     <section className="wrap summary">
       <div className="summary__grid">
-        <span className="eyebrow">Summary</span>
+        <span className="eyebrow">About</span>
         <div>
           {SUMMARY_PARAGRAPHS.map((p) => (<p key={p}>{p}</p>))}
+          <div className="current-roles" aria-label="Current roles">
+            <span className="current-roles__label">Current roles</span>
+            {EXPERIENCE.slice(0, 2).map((role) => (
+              <div className="current-role" key={role.title}>
+                <span className="current-role__dot" aria-hidden="true" />
+                <div>
+                  <strong>{role.title}</strong>
+                  <span>{role.org}</span>
+                  <time>{role.when}</time>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -166,12 +223,40 @@ function WorkSection() {
         <VideoPanel src={VIDEOS.work} className="video-panel--banner" />
         <div className="work__grid">
           {PROJECTS.map((proj) => (
-            <a className="proj" href={proj.link} target="_blank" rel="noreferrer" key={proj.no}>
-              <div className="proj__no">{proj.no}</div>
+            <article className="proj" key={proj.no}>
+              <div className="proj__head">
+                <span className="proj__no">{proj.no}</span>
+                <span className={`proj__status ${proj.status === 'LIVE' ? 'is-live' : 'is-building'}`}>{proj.status}</span>
+              </div>
               <h3>{proj.name}</h3>
               <p>{proj.pitch}</p>
-              <span className="proj__arrow">View project &#8594;</span>
-            </a>
+              <div className="proj__stack" aria-label={`${proj.name} technology stack`}>
+                {proj.stack.map((item) => <span key={item}>{item}</span>)}
+              </div>
+              <div className="proj__actions">
+                {proj.live && <a href={proj.live} target="_blank" rel="noreferrer">Live</a>}
+                <a href={proj.github} target="_blank" rel="noreferrer">GitHub</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SecurityLabSection() {
+  return (
+    <section className="security-lab" id="security-lab">
+      <div className="wrap">
+        <span className="eyebrow">Security Lab</span>
+        <p className="security-lab__intro">Self-built cybersecurity home lab running on VirtualBox with multi-VM architecture.</p>
+        <div className="security-lab__grid">
+          {SECURITY_LAB.map((item) => (
+            <article className="lab-card" key={item.label}>
+              <div className="lab-card__title"><i aria-hidden="true" />{item.label}</div>
+              <p>{item.desc}</p>
+            </article>
           ))}
         </div>
       </div>
@@ -186,9 +271,9 @@ function Footer() {
         <h2>Hiring for security, GRC, or IT operations?</h2>
         <div className="footer__links">
           <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-          <a href={`tel:${CONTACT.phone.replace(/-/g, '')}`}>{CONTACT.phone}</a>
-          <a href={CONTACT.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-          <a href={CONTACT.github} target="_blank" rel="noreferrer">GitHub</a>
+          <a href={CONTACT.linkedin} target="_blank" rel="noreferrer">linkedin.com/in/osman-jalloh5858</a>
+          <a href={CONTACT.github} target="_blank" rel="noreferrer">github.com/osman-jalloh-lab</a>
+          <span>{CONTACT.location}</span>
         </div>
       </div>
       <div className="footer__meta">
@@ -211,6 +296,7 @@ export default function Dossier() {
         <CompetenciesSection />
         <EducationSection />
         <WorkSection />
+        <SecurityLabSection />
         <Footer />
       </main>
     </div>

@@ -1,13 +1,13 @@
 export const NAME = 'Osman Jalloh';
 export const ROLE_LABEL = 'Security & Compliance Professional';
-export const ROLE_SUMMARY = "Security+ and CySA+ certified. I hold federal compliance deadlines and enterprise IT operations, and I automate the parts that shouldn't depend on memory.";
+export const ROLE_SUMMARY = "Security+ and CySA+ certified. I run federal compliance deadlines and enterprise IT operations for two organizations at once, then build the software that makes sure nothing falls through.";
 
 export const CONTACT = {
   email: 'osmanjalloh104@gmail.com',
   schoolEmail: 'osman.jalloh@g.austincc.edu',
   phone: '737-704-4182',
   location: 'Austin, TX',
-  linkedin: 'https://linkedin.com/in/osmanjalloh',
+  linkedin: 'https://www.linkedin.com/in/osman-jalloh5858',
   github: 'https://github.com/osman-jalloh-lab',
 };
 
@@ -52,32 +52,48 @@ export const CREDENTIALS = [
     id: 'networking-osa',
     stamp: 'ACC OSA',
     name: 'Computer Networking Occupational Skills Award',
-    idLine: 'Austin Community College',
-    desc: 'Occupational Skills Award in computer networking fundamentals.',
+    idLine: 'Austin Community College, completed 5/18/2025',
+    desc: 'Occupational Skills Award in computer networking, 12 credit hours.',
+    img: '/certs/computer-networking-osa.png',
+    document: '/certs/computer-networking-osa.pdf',
     tone: 4,
   },
   {
     id: 'programming-osa',
     stamp: 'ACC OSA',
     name: 'Computer Programming Occupational Skills Award',
-    idLine: 'Austin Community College',
-    desc: 'Occupational Skills Award in computer programming fundamentals.',
+    idLine: 'Austin Community College, completed 5/18/2025',
+    desc: 'Occupational Skills Award in computer programming fundamentals, 12 credit hours.',
+    img: '/certs/computer-programming-osa.png',
     tone: 0,
   },
   {
     id: 'ibm-grc',
-    stamp: 'IBM GRC IN PROGRESS',
-    name: 'IBM GRC Certification',
-    idLine: 'Capstone, final project underway',
-    desc: 'Completing the final project for a governance, risk, and compliance certification through IBM.',
+    stamp: 'IBM VERIFIED',
+    name: 'Cybersecurity Compliance Framework, Standards & Regulations',
+    idLine: 'IBM, via Coursera, completed Jul 10, 2026',
+    desc: 'Governance, risk, and compliance frameworks and regulatory standards, authorized by IBM Skills Network.',
+    img: '/certs/ibm-grc-compliance-framework.png',
+    document: '/certs/ibm-grc-compliance-framework.pdf',
+    verifyUrl: 'https://coursera.org/verify/8E5HXBB3EK3L',
     tone: 1,
-    pending: true,
+  },
+  {
+    id: 'google-ai-fundamentals',
+    stamp: 'GOOGLE VERIFIED',
+    name: 'AI Fundamentals',
+    idLine: 'Google, via Coursera, completed Jul 10, 2026',
+    desc: 'Online course authorized by Google and offered through Coursera.',
+    img: '/certs/google-ai-fundamentals.png',
+    document: '/certs/google-ai-fundamentals.pdf',
+    verifyUrl: 'https://coursera.org/verify/MV3E9NSA825T',
+    tone: 2,
   },
 ];
 
 export const SUMMARY_PARAGRAPHS = [
-  'I work where security, compliance, and operations meet. At Austin Community College I manage Form I-9 and E-Verify compliance across more than 1,300 employee records and 11 campuses, the kind of work where a missed federal deadline has real consequences. At the University of Texas System I deliver Tier 1 and Tier 2 enterprise support across identity, Microsoft 365, and endpoint management.',
-  'Certified in Security+ and CySA+, working toward a bachelor’s in Network Systems and Cybersecurity at Austin Community College. Outside of work I build the tools I wish my own teams had, including a nine-agent AI operating system and a production I-9 compliance platform. My long-term direction is GRC consulting for organizations that need enterprise-grade compliance without an enterprise headcount.',
+  'I am a cybersecurity and IT professional based in Austin, TX. I hold CompTIA Security+ and CySA+ certifications, completed my degree in Network Systems and Cybersecurity from Austin Community College in May 2026 with a 3.9 GPA, and am currently pursuing my B.S. while working two roles simultaneously.',
+  'My work spans three domains: security and compliance (NIST 800-53, HIPAA, I-9 compliance, E-Verify), IT operations (Tier 1/2 helpdesk, Active Directory, M365, workstation imaging), and AI-native development (full-stack web apps, LLM API integration, nine-agent AI operating system).',
 ];
 
 export const EXPERIENCE = [
@@ -147,21 +163,45 @@ export const PROJECTS = [
   {
     no: '01',
     name: 'Hermes OS',
-    pitch: 'Nine-agent personal AI operating system, built to automate everything. Next.js, Prisma, Turso, Vercel.',
-    link: 'https://github.com/osman-jalloh-lab/myos',
+    pitch: 'Nine-agent personal AI operating system. Built to automate everything.',
+    stack: ['Next.js', 'Prisma', 'Turso', 'Claude API', 'Vercel', 'Telegram API'],
+    status: 'IN DEVELOPMENT',
+    github: 'https://github.com/osman-jalloh-lab/myos',
   },
   {
     no: '02',
     name: 'I-9 Compliance Hub',
-    pitch: 'AI-powered compliance platform serving 1,300+ employees, live in production at Austin Community College.',
-    link: 'https://visadata.netlify.app',
+    pitch: 'AI-powered I-9 and visa compliance platform. 1,300+ employees. Running in production at ACC.',
+    stack: ['Next.js', 'Claude API', 'Perplexity AI', 'Power Automate', 'Netlify'],
+    status: 'LIVE',
+    live: 'https://visadata.netlify.app',
+    github: 'https://github.com/osman-jalloh-lab/i9-Compliance-HUB',
   },
   {
     no: '03',
     name: 'Lavaal',
-    pitch: 'Enterprise IT hardware for the West Africa market, security audited against the OWASP Top 10.',
-    link: 'https://github.com/osman-jalloh-lab/Lavaal-',
+    pitch: 'Enterprise IT hardware platform for West Africa. Security audited. Production deployed.',
+    stack: ['React', 'Node.js', 'REST APIs', 'Netlify', 'OWASP'],
+    status: 'LIVE',
+    github: 'https://github.com/osman-jalloh-lab/Lavaal-',
   },
+  {
+    no: '04',
+    name: 'AI-literacy',
+    pitch: 'AI companion and prompt toolkit for HR staff. Salary placement tool and rate calculator built in.',
+    stack: ['HTML', 'CSS', 'JavaScript', 'Express.js', 'Node.js'],
+    status: 'LIVE',
+    github: 'https://github.com/osman-jalloh-lab/AI-literacy-',
+  },
+];
+
+export const SECURITY_LAB = [
+  { label: 'Elastic Stack SIEM', desc: 'Real-time alert monitoring, log ingestion, and threat detection.' },
+  { label: 'pfSense Firewall', desc: 'WAN/LAN/DMZ segmentation, IDS/IPS, and custom firewall rules.' },
+  { label: 'Ubuntu Attack VMs', desc: 'MITRE ATT&CK-mapped attack simulations.' },
+  { label: 'Python Scripts', desc: 'Custom detection logic, anomaly detection, and automated reporting.' },
+  { label: 'MITRE ATT&CK', desc: 'Credential access, lateral movement, and persistence simulations.' },
+  { label: 'VirtualBox', desc: 'Multi-VM isolated lab environment.' },
 ];
 
 export const EDUCATION = [
