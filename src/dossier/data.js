@@ -140,6 +140,7 @@ export const COMPETENCIES = [
   { title: 'IT Operations', tone: 2, tags: ['Tier 1/2 Support', 'Active Directory', 'M365', 'Endpoint Mgmt'] },
   { title: 'AI & Automation', tone: 3, tags: ['Claude API', 'Claude Code', 'ChatGPT', 'Power Automate', 'GitHub Actions'] },
   { title: 'Building', tone: 4, tags: ['React', 'Next.js', 'Node.js', 'Prisma', 'Vercel', 'Python'] },
+  { title: 'Design & Creative', tone: 1, tags: ['UX Design', 'UI Design', 'Higgsfield', 'AI Video'] },
 ];
 
 export const PROJECTS = [
@@ -230,6 +231,10 @@ const SKILL_META = {
   'Prisma': ['Pr', 3],
   'Vercel': ['Vc', 4],
   'Python': ['Py', 3],
+  'UX Design': ['Ux', 4],
+  'UI Design': ['Ui', 4],
+  'Higgsfield': ['Hf', 4],
+  'AI Video': ['Av', 3],
 };
 
 export const SKILL_ELEMENTS = COMPETENCIES.flatMap((group) =>
