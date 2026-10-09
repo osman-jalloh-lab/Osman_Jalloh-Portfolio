@@ -66,12 +66,11 @@ export const CREDENTIALS = [
   },
   {
     id: 'ibm-grc',
-    stamp: 'IBM GRC IN PROGRESS',
+    stamp: 'IBM GRC',
     name: 'IBM GRC Certification',
-    idLine: 'Capstone, final project underway',
-    desc: 'Completing the final project for a governance, risk, and compliance certification through IBM.',
+    idLine: 'IBM, Governance, Risk, and Compliance',
+    desc: 'Completed the governance, risk, and compliance certification through IBM, including the final project.',
     tone: 1,
-    pending: true,
   },
 ];
 
@@ -141,6 +140,7 @@ export const COMPETENCIES = [
   { title: 'IT Operations', tone: 2, tags: ['Tier 1/2 Support', 'Active Directory', 'M365', 'Endpoint Mgmt'] },
   { title: 'AI & Automation', tone: 3, tags: ['Claude API', 'Claude Code', 'ChatGPT', 'Power Automate', 'GitHub Actions'] },
   { title: 'Building', tone: 4, tags: ['React', 'Next.js', 'Node.js', 'Prisma', 'Vercel', 'Python'] },
+  { title: 'Design & Creative', tone: 1, tags: ['UX Design', 'UI Design', 'Higgsfield', 'AI Video'] },
 ];
 
 export const PROJECTS = [
@@ -173,4 +173,190 @@ export const VIDEOS = {
   hero: '/video/orbit.mp4',
   experience: '/video/builder.mp4',
   work: '/video/closer.mp4',
+};
+
+/* ════════════════════════════════════════════════════════════════
+   Portfolio upgrade 2: additive exports only. Nothing above changed.
+   ════════════════════════════════════════════════════════════════ */
+
+/* 1. Talking hero video ("recorded statement")
+   Drop your recording at public/video/intro.mp4 (under 30 seconds).
+   Until that file exists the hero falls back to fallbackSrc (orbit.mp4).
+   captions: timed lines drawn over the video, shape { start, end, text }
+   with seconds. Leave empty until you have recorded and know the timing.
+   vtt: optional path to a .vtt file for a native caption track. Use
+   either captions or vtt, not both. */
+export const INTRO_VIDEO = {
+  src: '/video/intro.mp4',
+  poster: '/photo/osman-portrait.jpg',
+  fallbackSrc: VIDEOS.hero,
+  captions: [],
+  vtt: null,
+};
+
+/* 2. Credential badge (flipping ID card)
+   Placeholder badge number, deliberately not a real ACC or UT ID.
+   Change the format to anything you like, but do not use a real ID. */
+export const BADGE_NO = 'OJ-2026-001';
+
+export const CERT_BAR = 'CompTIA Security+ (SY0-701) | CompTIA CySA+ (CS0-003) | IBM GRC Framework | Google AI Fundamentals | A.S. Network Systems and Cybersecurity, May 2026';
+
+/* 3. Periodic table of skills
+   Built from COMPETENCIES, so adding a tag there adds a tile here.
+   Each entry maps a tag to [two-character symbol, level 1 to 5].
+   LEVELS ARE MY DRAFT. Adjust any number to match how you rate yourself.
+   1 = familiar, 3 = working proficiency, 5 = daily expert. */
+const SKILL_META = {
+  'NIST 800-53': ['Ni', 3],
+  'Risk Assessment': ['Ra', 3],
+  'MITRE ATT&CK': ['At', 3],
+  'SOC Lab': ['So', 3],
+  'HIPAA': ['Hi', 3],
+  'Form I-9': ['I9', 5],
+  'E-Verify': ['Ev', 5],
+  'Reverification': ['Rv', 4],
+  'SOP Authorship': ['Sp', 4],
+  'Tier 1/2 Support': ['T2', 4],
+  'Active Directory': ['Ad', 3],
+  'M365': ['M3', 4],
+  'Endpoint Mgmt': ['Em', 3],
+  'Claude API': ['Ca', 4],
+  'Claude Code': ['Cc', 4],
+  'ChatGPT': ['Cg', 4],
+  'Power Automate': ['Pa', 4],
+  'GitHub Actions': ['Ga', 2],
+  'React': ['Rc', 4],
+  'Next.js': ['Nx', 4],
+  'Node.js': ['Nd', 3],
+  'Prisma': ['Pr', 3],
+  'Vercel': ['Vc', 4],
+  'Python': ['Py', 3],
+  'UX Design': ['Ux', 4],
+  'UI Design': ['Ui', 4],
+  'Higgsfield': ['Hf', 4],
+  'AI Video': ['Av', 3],
+};
+
+export const SKILL_ELEMENTS = COMPETENCIES.flatMap((group) =>
+  group.tags.map((name) => {
+    const [symbol, level] = SKILL_META[name] || [name.slice(0, 2), 1];
+    return { symbol, name, category: group.title, tone: group.tone, level };
+  }),
+);
+
+/* 4. Sideways-scrolling achievements ("case files")
+   Every figure below is documented elsewhere in this file or in your
+   master profile. Two numbers from the original spec are NOT here
+   because nothing on file supports them: the hackathon prize amount
+   and a count of 100+ Section 3 reverifications. Add them back to the
+   matching stat or detail line once you have confirmed them. */
+export const ACHIEVEMENTS = [
+  {
+    id: 'develop-u',
+    caseNo: 'FILE 001',
+    title: 'UFCU Develop U Hackathon',
+    stat: '1st place',
+    detail: 'Team VERIFIED, a randomly assigned cross-functional team. Built the VERIFIED onboarding concept and the Nova credit-product component that cuts repeated identity and eligibility checks for noncitizen members.',
+  },
+  {
+    id: 'i9-hub',
+    caseNo: 'FILE 002',
+    title: 'I-9 Compliance Hub',
+    stat: '1,300+ records',
+    detail: 'Production platform live across 11 campuses at Austin Community College. SOPs, decision trees, and knowledge management in one place.',
+  },
+  {
+    id: 'sec-cysa',
+    caseNo: 'FILE 003',
+    title: 'Security+ and CySA+',
+    stat: '2 certifications',
+    detail: 'CompTIA Security+ (SY0-701) and CySA+ (CS0-003), which together earn the CSAP stackable credential.',
+  },
+  {
+    id: 'reverification',
+    caseNo: 'FILE 004',
+    title: 'I-9 reverification program',
+    stat: '80-90% on time',
+    detail: 'Proactive outreach 30 to 90 days before work authorization expires, covering multiple visa and EAD categories.',
+  },
+  {
+    id: 'hermes-os',
+    caseNo: 'FILE 005',
+    title: 'Hermes OS',
+    stat: '9 agents',
+    detail: 'Personal AI operating system built on Next.js, Prisma, Turso, and Vercel, with additive-only change control.',
+  },
+];
+
+/* UI strings for the four new patterns. */
+export const UI_COPY = {
+  statement: {
+    label: 'Recorded statement',
+    playHint: 'Tap to play with sound',
+    stopHint: 'Tap to mute and loop',
+    rec: 'REC',
+    ariaPlay: 'Play recorded statement with sound',
+    ariaStop: 'Mute recorded statement and return to the silent loop',
+  },
+  badge: {
+    header: 'Credential / OJ-2026',
+    badgeLabel: 'Badge no.',
+    stamp: 'CLEARED',
+    flipHint: 'Tap to flip',
+    flipBackHint: 'Tap to flip back',
+    contactTitle: 'Contact',
+    certTitle: 'Certifications',
+    ariaFlip: 'flip credential badge to see contact details',
+    ariaFlipBack: 'Flip credential badge back to the front',
+  },
+  skills: {
+    eyebrow: 'Core Competencies',
+    note: 'Corner number is proficiency, 1 to 5. Tap a tile to highlight its group.',
+    ariaLegend: 'Skill groups',
+  },
+  achievements: {
+    eyebrow: 'Case Files',
+    outcome: 'Outcome',
+    notes: 'Notes',
+    prev: 'Previous case file',
+    next: 'Next case file',
+    region: 'Achievements, scroll sideways',
+  },
+};
+
+/* ── scroll-through tour (Higgsfield fly-through video) ─────────────
+   Scroll position scrubs the video. If the file is missing, the tour
+   falls back to a stacked, static layout using the poster. */
+export const TOUR = {
+  src: '/video/inside.mp4',
+  poster: '/photo/osman-portrait.jpg',
+  eyebrow: 'Scroll to go inside',
+  stages: [
+    {
+      at: 0,
+      kicker: '01 / The person',
+      title: 'Osman Jalloh',
+      body: 'Security and compliance professional in Austin, TX. I hold federal deadlines and automate the parts that should not depend on memory.',
+    },
+    {
+      at: 0.25,
+      kicker: '02 / The mind',
+      title: 'How I think',
+      body: 'Controls first, evidence second, deadlines always. Risk mapped to NIST 800-53, compliance turned into systems people can actually follow.',
+      chips: ['NIST 800-53', 'Risk Assessment', 'Form I-9', 'E-Verify', 'Python'],
+    },
+    {
+      at: 0.6,
+      kicker: '03 / The work',
+      title: 'Case files',
+      files: ['develop-u', 'i9-hub', 'sec-cysa'],
+    },
+    {
+      at: 0.88,
+      kicker: '04 / Next',
+      title: 'Let\u2019s work together',
+      body: 'Open to GRC, security, and IT operations roles. Long term, GRC consulting for small businesses and nonprofits.',
+      cta: true,
+    },
+  ],
 };
