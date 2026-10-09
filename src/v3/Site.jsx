@@ -148,7 +148,7 @@ function About() {
             ))}
           </dl>
           <p className="about__p">
-            Security+ and CySA+ certified, IBM GRC trained, finishing a B.S. in Network Systems and Cybersecurity.
+            Security+ and CySA+ certified, IBM-certified in compliance frameworks and Enterprise Design Thinking, finishing a B.S. in Network Systems and Cybersecurity.
             Long-term, I want to bring enterprise-grade compliance to small businesses and nonprofits that cannot afford an enterprise headcount.
           </p>
         </div>
@@ -274,7 +274,7 @@ function Credentials() {
             <article className="cred" key={c.id}>
               <div className="cred__n mono">{String(i + 1).padStart(2, '0')}</div>
               <div className="cred__img">
-                {c.img ? <img src={c.img} alt="" loading="lazy" /> : <span className="cred__mark">{c.stamp}</span>}
+                {c.img ? <img src={c.img} alt={`${c.name} certificate`} loading="lazy" /> : <span className="cred__mark">{c.name}</span>}
               </div>
               <h3>{c.name}</h3>
               <p className="mono">{c.idLine}</p>

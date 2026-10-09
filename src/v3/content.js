@@ -1,12 +1,12 @@
 // v3 content. Pulls facts from the dossier data so there is one source of truth.
-import { CONTACT, EXPERIENCE, COMPETENCIES, CREDENTIALS } from '../dossier/data.js';
+import { CONTACT, EXPERIENCE as OLD_EXPERIENCE, COMPETENCIES } from '../dossier/data.js';
 
-export { CONTACT, EXPERIENCE, CREDENTIALS };
+export { CONTACT };
 
 export const HERO = {
   first: 'Osman',
   last: 'Jalloh',
-  role: 'Security, GRC & IT Operations',
+  role: 'Compliance, Audit & IT Operations',
   place: 'Austin, TX',
   // Higgsfield drone pull-back from the bridge photo. Falls back to the photo if missing.
   video: '/video/bridge.mp4',
@@ -15,18 +15,18 @@ export const HERO = {
 };
 
 export const STATEMENT =
-  'I work where security, compliance and operations meet. I hold federal deadlines for 1,300+ employees across 11 campuses, run enterprise support for the UT System, and build the tools I wish my teams had. Controls first, evidence second, deadlines always.';
+  'I work where compliance, identity and IT operations meet. I audit identity and employment-eligibility records against federal controls for 1,300+ employees across 11 campuses, keep UT System endpoints compliant through Intune, and build the tools I wish my teams had. Controls first, evidence second, deadlines always.';
 
 export const STATS = [
   { value: 1300, suffix: '+', label: 'I-9 records owned' },
   { value: 11, suffix: '', label: 'Campuses covered' },
-  { value: 7, suffix: '', label: 'Credentials earned' },
+  { value: 9, suffix: '', label: 'Credentials earned' },
   { value: 3.9, suffix: '', label: 'GPA', decimals: 1 },
 ];
 
 export const MARQUEE = [
-  'Security+', 'CySA+', 'IBM GRC', 'NIST 800-53', 'E-Verify', 'UX / UI Design',
-  'Higgsfield', 'Claude Code', 'Power Automate', 'Next.js', 'MITRE ATT&CK', 'M365',
+  'Security+', 'CySA+', 'Compliance Frameworks', 'NIST 800-53', 'Identity Governance', 'Intune',
+  'E-Verify', 'Design Thinking', 'UX / UI', 'Higgsfield', 'Claude Code', 'Power Automate', 'M365',
 ];
 
 export const WORK = [
@@ -81,9 +81,20 @@ const LEVELS = {
   'UX Design': 4, 'UI Design': 4, Higgsfield: 4, 'AI Video': 3,
 };
 
+const EXTRA = {
+  'Security & GRC': ['Compliance Frameworks', 'Audit & Evidence'],
+  'Compliance Operations': ['Identity Governance', 'Workday'],
+  'IT Operations': ['Intune', 'Autopilot'],
+  'Design & Creative': ['Design Thinking'],
+};
+Object.assign(LEVELS, {
+  'Compliance Frameworks': 3, 'Audit & Evidence': 4, 'Identity Governance': 4, Workday: 5,
+  Intune: 3, Autopilot: 3, 'Design Thinking': 4,
+});
+
 export const SKILLS = COMPETENCIES.map((g) => ({
   title: g.title,
-  items: g.tags.map((t) => ({ name: t, level: LEVELS[t] ?? 3 })),
+  items: [...g.tags, ...(EXTRA[g.title] || [])].map((t) => ({ name: t, level: LEVELS[t] ?? 3 })),
 }));
 
 export const TOUR = {
@@ -94,3 +105,47 @@ export const TOUR = {
     { at: 0.62, kicker: '03', title: 'The build', body: 'When a process depends on memory, I automate it. Python, Power Automate, Claude Code.' },
   ],
 };
+
+/* Experience, updated from LinkedIn (Oct 2026). Older roles carry over from the dossier. */
+export const EXPERIENCE = [
+  {
+    when: 'MAY 2026 to PRESENT',
+    title: 'Client Services Associate, Information Technology',
+    org: 'The University of Texas System',
+    bullets: [
+      'Resolve Tier 1 and Tier 2 tickets across Windows, Mac and Microsoft 365: account and access management, endpoint configuration, licensing, networking and printing',
+      'Administer Microsoft Intune device enrollment and compliance policies so devices meet UT System security standards before they reach users',
+      'Deploy and remove software with admin credentials so every change is authorized and auditable under UT System IT policy',
+      'Diagnosed a recurring uniFLOW/Canon badge-release failure and escalated it with a structured technical summary',
+      'Documented an Autopilot enrollment failure (0x80180014) with full context before it spread to more users',
+      'Image and deploy Windows and Mac workstations, and run IT asset lifecycle: pickup, delivery, surplus and inventory',
+    ],
+  },
+  {
+    when: 'JUL 2024 to PRESENT',
+    title: 'HR Specialist IV, Compliance, Audit & Identity Governance',
+    org: 'Austin Community College',
+    bullets: [
+      'Audit employment-eligibility and identity-verification records for gaps, exceptions, expiration risk and regulatory issues',
+      'Evaluate records against federal requirements and internal controls, keeping documentation audit-ready',
+      'Investigate complex cases in employment authorization, identity documentation and reverification',
+      'Run compliance monitoring and evidence collection in Workday, E-Verify and case-management systems',
+      'Write SOPs, internal guidance and training that tighten control consistency and cut compliance risk',
+      'Built the I-9 Compliance Hub and a GRC automation pipeline mapped to NIST 800-53',
+    ],
+  },
+  ...OLD_EXPERIENCE.slice(2),
+];
+
+/* Credentials with real certificate images. */
+export const CREDENTIALS = [
+  { id: 'sec', name: 'CompTIA Security+', idLine: 'SY0-701', img: '/certs/security-plus.png' },
+  { id: 'cysa', name: 'CompTIA CySA+', idLine: 'CS0-003', img: '/certs/cysa-plus.png' },
+  { id: 'csap', name: 'CompTIA Security Analytics Professional', idLine: 'Stackable, Security+ and CySA+', img: '/certs/csap-badge.png' },
+  { id: 'ibm-comp', name: 'Cybersecurity Compliance Framework, Standards & Regulations', idLine: 'IBM via Coursera, Jul 2026', img: '/certs/ibm-compliance.webp' },
+  { id: 'ibm-edt', name: 'Enterprise Design Thinking Practitioner', idLine: 'IBM SkillsBuild, Aug 2026', img: '/certs/ibm-design-thinking.webp' },
+  { id: 'google-ai', name: 'AI Fundamentals', idLine: 'Google via Coursera, Jul 2026', img: '/certs/google-ai.webp' },
+  { id: 'acc-cert', name: 'Certificate, IT & Cybersecurity', idLine: 'ACC, May 2026, Scholastic Excellence', img: '/certs/acc-cybersecurity-cert.png' },
+  { id: 'osa-net', name: 'Occupational Skills Award, Computer Networking', idLine: 'ACC, May 2025', img: '/certs/acc-osa-networking.webp' },
+  { id: 'osa-prog', name: 'Occupational Skills Award, Computer Programming', idLine: 'ACC, May 2025', img: '/certs/acc-osa-programming.webp' },
+];
