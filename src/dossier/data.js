@@ -66,12 +66,11 @@ export const CREDENTIALS = [
   },
   {
     id: 'ibm-grc',
-    stamp: 'IBM GRC IN PROGRESS',
+    stamp: 'IBM GRC',
     name: 'IBM GRC Certification',
-    idLine: 'Capstone, final project underway',
-    desc: 'Completing the final project for a governance, risk, and compliance certification through IBM.',
+    idLine: 'IBM, Governance, Risk, and Compliance',
+    desc: 'Completed the governance, risk, and compliance certification through IBM, including the final project.',
     tone: 1,
-    pending: true,
   },
 ];
 
