@@ -13,8 +13,28 @@ gsap.registerPlugin(ScrollTrigger);
 const reduced = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* Scroll-scrub a <video>: progress 0..1 drives currentTime. */
-function scrubVideo(video, trigger, opts = {}) {
+/* Drive a <video> from scroll on desktop. Touch browsers (iOS Safari in
+   particular) will not paint frames from currentTime seeks on a video that
+   has never played, so there we play it muted on a loop while in view.
+   The poster image underneath shows until the first frame is ready. */
+const isTouch = () => typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
+
+function mountVideo(video, trigger) {
+  const ready = () => video.classList.add('is-ready');
+  video.addEventListener('error', () => video.remove(), { once: true });
+  if (isTouch()) {
+    video.loop = true;
+    video.addEventListener('playing', ready, { once: true });
+    const play = () => video.play().catch(() => {});
+    ScrollTrigger.create({
+      trigger, start: 'top bottom', end: 'bottom top',
+      onEnter: play, onEnterBack: play,
+      onLeave: () => video.pause(), onLeaveBack: () => video.pause(),
+    });
+    return;
+  }
+  video.addEventListener('loadeddata', ready, { once: true });
+  if (video.readyState >= 2) ready();
   let target = 0;
   let raf = 0;
   const tick = () => {
@@ -23,13 +43,10 @@ function scrubVideo(video, trigger, opts = {}) {
     const t = target * (video.duration - 0.05);
     if (Math.abs(video.currentTime - t) > 0.01) video.currentTime = t;
   };
-  return ScrollTrigger.create({
-    trigger,
-    start: 'top top',
-    end: 'bottom bottom',
-    ...opts,
+  ScrollTrigger.create({
+    trigger, start: 'top top', end: 'bottom bottom',
     onUpdate: (self) => {
-      target = opts.map ? opts.map(self.progress) : self.progress;
+      target = self.progress;
       if (!raf) raf = requestAnimationFrame(tick);
     },
   });
@@ -78,7 +95,7 @@ function Hero() {
       <div className="hero__sticky">
         <div className="hero__media" data-hero-media>
           <img src={HERO.poster} alt="Osman Jalloh on the Lamar pedestrian bridge with the Austin skyline behind him" className="hero__img" />
-          <video className="hero__video" data-hero-video src={HERO.video} muted playsInline preload="auto" poster={HERO.poster} aria-hidden="true" />
+          <video className="hero__video" data-hero-video src={HERO.video} muted playsInline preload="auto" aria-hidden="true" />
           <div className="hero__shade" />
         </div>
         <h1 className="hero__name" aria-label={`${HERO.first} ${HERO.last}`}>
@@ -170,7 +187,8 @@ function Tour() {
   return (
     <section className="tour" data-tour aria-label="How I think">
       <div className="tour__sticky">
-        <video className="tour__video" data-tour-video src={TOUR.src} muted playsInline preload="auto" poster="/photo/osman-portrait.jpg" aria-hidden="true" />
+        <img className="tour__poster" src="/photo/osman-portrait.jpg" alt="" aria-hidden="true" />
+        <video className="tour__video" data-tour-video src={TOUR.src} muted playsInline preload="auto" aria-hidden="true" />
         <div className="tour__shade" />
         <div className="tour__copy wrap">
           {TOUR.stages.map((s, i) => (
@@ -365,11 +383,7 @@ export default function Site() {
         });
       });
       const hv = document.querySelector('[data-hero-video]');
-      if (hv) {
-        hv.addEventListener('loadeddata', () => hv.classList.add('is-ready'), { once: true });
-        hv.addEventListener('error', () => hv.remove(), { once: true });
-        scrubVideo(hv, '[data-hero]');
-      }
+      if (hv) mountVideo(hv, '[data-hero]');
 
       /* marquee drifts, speeds with scroll velocity */
       const track = document.querySelector('[data-marquee]');
@@ -404,10 +418,7 @@ export default function Site() {
       /* tour: video scrub + stage captions */
       const tv = document.querySelector('[data-tour-video]');
       const stages = gsap.utils.toArray('[data-stage]');
-      if (tv) {
-        tv.addEventListener('error', () => tv.remove(), { once: true });
-        scrubVideo(tv, '[data-tour]');
-      }
+      if (tv) mountVideo(tv, '[data-tour]');
       ScrollTrigger.create({
         trigger: '[data-tour]', start: 'top top', end: 'bottom bottom',
         onUpdate: (s) => {

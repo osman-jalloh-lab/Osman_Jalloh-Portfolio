@@ -187,7 +187,9 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spa
 /* tour */
 .tour { position: relative; height: 420vh; background: #000; color: #fff; }
 .tour__sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; }
-.tour__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tour__poster, .tour__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tour__video { opacity: 0; transition: opacity 0.6s; }
+.tour__video.is-ready { opacity: 1; }
 .tour__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.1) 60%); }
 .tour__copy { position: relative; height: 100%; display: grid; align-items: center; }
 .tour__stage { grid-area: 1 / 1; max-width: 560px; opacity: 0; transform: translateY(24px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
@@ -293,4 +295,9 @@ em { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spa
   .creds__track { width: auto; flex-wrap: wrap; padding-inline: var(--gutter); }
   .creds__sticky { height: auto; padding-block: 96px; }
   .dot, .hero__hint::after { animation: none; }
+}
+
+@media (max-width: 799px) {
+  .tour__copy { align-items: end; padding-bottom: 72px; }
+  .tour__shade { background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.15) 62%); }
 }
