@@ -167,7 +167,8 @@ function Work() {
       <div className="stack">
         {WORK.map((w, i) => (
           <article className={`card card--${w.tone}`} key={w.no} style={{ '--i': i }} data-card>
-            <div className="card__inner">
+            <div className={`card__inner ${w.img ? 'has-img' : ''}`}>
+              {w.img && <figure className="card__img"><img src={w.img} alt={w.imgAlt} loading="lazy" /></figure>}
               <div className="card__top mono"><span>{w.no}</span><span>{w.kind}</span></div>
               <h3 className="card__name">{w.name}</h3>
               <p className="card__desc">{w.desc}</p>

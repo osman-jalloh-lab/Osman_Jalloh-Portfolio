@@ -56,6 +56,8 @@ export const WORK = [
     kind: 'UFCU Develop U Hackathon, 1st place',
     desc: 'Onboarding concept and the Nova credit-product component that cut repeated identity and eligibility checks for noncitizen members.',
     tags: ['Fintech', 'UX', 'Team build'],
+    img: '/photo/hackathon.webp',
+    imgAlt: 'Osman holding the UFCU Develop U first place check',
     tone: 'mint',
   },
   {
