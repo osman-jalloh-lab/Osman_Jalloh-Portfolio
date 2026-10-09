@@ -97,14 +97,47 @@ export const SKILLS = COMPETENCIES.map((g) => ({
   items: [...g.tags, ...(EXTRA[g.title] || [])].map((t) => ({ name: t, level: LEVELS[t] ?? 3 })),
 }));
 
-export const TOUR = {
-  src: '/video/inside.mp4',
-  stages: [
-    { at: 0.0, kicker: '01', title: 'The person', body: 'Security and compliance professional in Austin. Calm under deadlines, loud about controls.' },
-    { at: 0.3, kicker: '02', title: 'The method', body: 'Risk mapped to NIST 800-53. Evidence kept. Compliance turned into systems people can actually follow.' },
-    { at: 0.62, kicker: '03', title: 'The build', body: 'When a process depends on memory, I automate it. Python, Power Automate, Claude Code.' },
-  ],
-};
+/* "How I think": a fly-through wall. Each layer sits deeper in 3D space and
+   scrolling moves the camera forward through them. Tiles are placed around the
+   edges (x, y in vw/vh from center) so the middle stays open like a tunnel. */
+export const DEPTH = [
+  {
+    tiles: [
+      { src: '/photo/osman-bridge.webp', x: -34, y: -18, w: 22, r: 6 },
+      { src: '/photo/osman-jacket.webp', x: 33, y: 16, w: 20, r: -5 },
+      { word: 'NIST 800-53', x: 30, y: -30 },
+      { word: 'Identity', x: -30, y: 30 },
+    ],
+  },
+  { chapter: { n: '01', title: 'Controls first.', body: 'Every process gets mapped to a control before it gets automated. Risk named, owner named, deadline named.' } },
+  {
+    tiles: [
+      { src: '/certs/ibm-compliance.webp', x: 34, y: -20, w: 24, r: -4 },
+      { src: '/photo/hackathon.webp', x: -35, y: 14, w: 18, r: 5 },
+      { word: 'Audit-ready', x: -28, y: -32 },
+      { word: 'E-Verify', x: 28, y: 32 },
+    ],
+  },
+  { chapter: { n: '02', title: 'Evidence, always.', body: 'If it is not documented, it did not happen. SOPs people actually follow, records that survive an audit.' } },
+  {
+    tiles: [
+      { src: '/photo/osman-bridge-side.webp', x: 33, y: 10, w: 17, r: -6 },
+      { src: '/certs/security-plus.png', x: -33, y: -18, w: 20, r: 4 },
+      { word: 'Intune', x: -26, y: 30 },
+      { word: 'Claude Code', x: 26, y: -32 },
+    ],
+  },
+  { chapter: { n: '03', title: 'Automate the memory.', body: 'When a deadline depends on someone remembering, I build the system instead. Python, Power Automate, Claude Code.' } },
+  {
+    tiles: [
+      { src: '/certs/ibm-design-thinking.webp', x: -32, y: 18, w: 22, r: -3 },
+      { src: '/photo/osman-portrait.jpg', x: 34, y: -16, w: 22, r: 5 },
+      { word: 'Design Thinking', x: 26, y: 30 },
+      { word: 'Python', x: -28, y: -30 },
+    ],
+  },
+  { finale: { src: '/photo/osman-bridge.webp', title: 'Then I ship it.' } },
+];
 
 /* Experience, updated from LinkedIn (Oct 2026). Older roles carry over from the dossier. */
 export const EXPERIENCE = [

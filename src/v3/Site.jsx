@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import {
-  HERO, STATEMENT, STATS, MARQUEE, WORK, SKILLS, TOUR,
+  HERO, STATEMENT, STATS, MARQUEE, WORK, SKILLS, DEPTH,
   EXPERIENCE, CREDENTIALS, CONTACT,
 } from './content.js';
 import './site.css';
@@ -184,23 +184,42 @@ function Work() {
   );
 }
 
-function Tour() {
+function Depth() {
   return (
-    <section className="tour" data-tour aria-label="How I think">
-      <div className="tour__sticky">
-        <img className="tour__poster" src="/photo/osman-portrait.jpg" alt="" aria-hidden="true" />
-        <video className="tour__video" data-tour-video src={TOUR.src} muted playsInline preload="auto" aria-hidden="true" />
-        <div className="tour__shade" />
-        <div className="tour__copy wrap">
-          {TOUR.stages.map((s, i) => (
-            <div className="tour__stage" key={i} data-stage={s.at}>
-              <p className="mono">{s.kicker} / How I think</p>
-              <h3>{s.title}</h3>
-              <p>{s.body}</p>
-            </div>
-          ))}
+    <section className="depth" data-depth aria-label="How I think">
+      <div className="depth__sticky">
+        <div className="depth__floor" data-depth-floor aria-hidden="true" />
+        <p className="depth__label mono">(How I think)</p>
+        <div className="depth__stage">
+          <div className="depth__world">
+            {DEPTH.map((layer, i) => (
+              <div className="depth__layer" key={i} data-layer={i}>
+                {layer.tiles?.map((t, k) =>
+                  t.src ? (
+                    <img key={k} className="tile tile--img" src={t.src} alt="" loading="lazy"
+                      style={{ '--x': t.x, '--y': t.y, '--w': t.w, '--r': `${t.r}deg` }} />
+                  ) : (
+                    <span key={k} className="tile tile--word" style={{ '--x': t.x, '--y': t.y }}>{t.word}</span>
+                  ),
+                )}
+                {layer.chapter && (
+                  <div className="chapter">
+                    <p className="mono">{layer.chapter.n} / How I think</p>
+                    <h3>{layer.chapter.title}</h3>
+                    <p className="chapter__body">{layer.chapter.body}</p>
+                  </div>
+                )}
+                {layer.finale && (
+                  <figure className="finale">
+                    <img src={layer.finale.src} alt="Osman on the Lamar bridge, Austin skyline behind" loading="lazy" />
+                    <figcaption>{layer.finale.title}</figcaption>
+                  </figure>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="tour__bar"><i data-tour-bar /></div>
+        <div className="depth__bar"><i data-depth-bar /></div>
       </div>
     </section>
   );
@@ -416,20 +435,33 @@ export default function Site() {
         gsap.to(card.querySelectorAll('.card__inner > *'), { opacity: 0, ease: 'none', scrollTrigger: { ...st, start: 'top 70%' } });
       });
 
-      /* tour: video scrub + stage captions */
-      const tv = document.querySelector('[data-tour-video]');
-      const stages = gsap.utils.toArray('[data-stage]');
-      if (tv) mountVideo(tv, '[data-tour]');
+      /* how I think: fly the camera forward through the layers */
+      const layers = gsap.utils.toArray('[data-layer]');
+      const GAP = 1600;
+      const total = (layers.length - 1) * GAP;
+      const dwell = gsap.parseEase('power2.inOut');
+      const placeDepth = (p) => {
+        // ease between layers so each one holds at the focal plane before moving on
+        const u = p * (layers.length - 1);
+        const i0 = Math.min(layers.length - 2, Math.floor(u));
+        const cam = (i0 + dwell(u - i0)) * GAP;
+        layers.forEach((l, i) => {
+          const d = cam - i * GAP; // 0 = focal plane, > 0 = flying past the camera
+          const o = d < 0 ? gsap.utils.clamp(0, 1, 1 + d / (GAP * 1.1)) : gsap.utils.clamp(0, 1, 1 - d / (GAP * 0.3));
+          l.style.opacity = o;
+          l.style.visibility = o < 0.01 ? 'hidden' : 'visible';
+          l.style.transform = `translate3d(-50%, -50%, ${d}px)`;
+        });
+      };
+      placeDepth(0);
       ScrollTrigger.create({
-        trigger: '[data-tour]', start: 'top top', end: 'bottom bottom',
+        trigger: '[data-depth]', start: 'top top', end: 'bottom bottom',
         onUpdate: (s) => {
-          gsap.set('[data-tour-bar]', { scaleX: s.progress });
-          let cur = 0;
-          stages.forEach((st, k) => { if (s.progress >= +st.dataset.stage) cur = k; });
-          stages.forEach((st, k) => st.classList.toggle('is-on', k === cur));
+          placeDepth(s.progress);
+          gsap.set('[data-depth-bar]', { scaleX: s.progress });
+          gsap.set('[data-depth-floor]', { backgroundPositionY: `${s.progress * total * 0.25}px` });
         },
       });
-      stages[0]?.classList.add('is-on');
 
       /* reveals */
       gsap.utils.toArray('[data-reveal]').forEach((el) => {
@@ -458,7 +490,7 @@ export default function Site() {
         <Marquee />
         <About />
         <Work />
-        <Tour />
+        <Depth />
         <Experience />
         <Skills />
         <Credentials />
