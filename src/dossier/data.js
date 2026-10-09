@@ -328,22 +328,26 @@ export const TOUR = {
   eyebrow: 'Scroll to go inside',
   stages: [
     {
+      at: 0,
       kicker: '01 / The person',
       title: 'Osman Jalloh',
       body: 'Security and compliance professional in Austin, TX. I hold federal deadlines and automate the parts that should not depend on memory.',
     },
     {
+      at: 0.25,
       kicker: '02 / The mind',
       title: 'How I think',
       body: 'Controls first, evidence second, deadlines always. Risk mapped to NIST 800-53, compliance turned into systems people can actually follow.',
       chips: ['NIST 800-53', 'Risk Assessment', 'Form I-9', 'E-Verify', 'Python'],
     },
     {
+      at: 0.6,
       kicker: '03 / The work',
       title: 'Case files',
       files: ['develop-u', 'i9-hub', 'sec-cysa'],
     },
     {
+      at: 0.88,
       kicker: '04 / Next',
       title: 'Let\u2019s work together',
       body: 'Open to GRC, security, and IT operations roles. Long term, GRC consulting for small businesses and nonprofits.',

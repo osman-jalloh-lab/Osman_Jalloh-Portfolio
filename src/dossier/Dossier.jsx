@@ -561,7 +561,8 @@ function ScrollTour() {
         video.currentTime = shown * Math.max(video.duration - 0.05, 0);
       }
       wrap.style.setProperty('--p', shown.toFixed(4));
-      const idx = Math.min(count - 1, Math.floor(target * count));
+      let idx = 0;
+      TOUR.stages.forEach((st, i) => { if (target >= st.at) idx = i; });
       setStage((prev) => (prev === idx ? prev : idx));
       if (shown !== target) raf = requestAnimationFrame(tick);
     };
@@ -586,7 +587,9 @@ function ScrollTour() {
     if (!wrap) return;
     const total = wrap.offsetHeight - window.innerHeight;
     const top = wrap.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top: top + total * ((i + 0.5) / count), behavior: 'smooth' });
+    const from = TOUR.stages[i].at;
+    const to = i + 1 < count ? TOUR.stages[i + 1].at : 1;
+    window.scrollTo({ top: top + total * ((from + to) / 2), behavior: 'smooth' });
   };
 
   const renderStage = (s, i) => (
