@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   NAME, ROLE_LABEL, ROLE_SUMMARY, CONTACT, CREDENTIALS, SUMMARY_PARAGRAPHS,
   EXPERIENCE, COMPETENCIES, PROJECTS, EDUCATION, VIDEOS,
-  INTRO_VIDEO, BADGE_NO, CERT_BAR, SKILL_ELEMENTS, ACHIEVEMENTS, UI_COPY,
+  INTRO_VIDEO, BADGE_NO, CERT_BAR, SKILL_ELEMENTS, ACHIEVEMENTS, UI_COPY, TOUR,
 } from './data';
 import './dossier.css';
 
@@ -528,12 +528,142 @@ function Footer() {
   );
 }
 
+
+/* ── scroll-through tour: scroll position scrubs the video ───────── */
+function ScrollTour() {
+  const wrapRef = useRef(null);
+  const videoRef = useRef(null);
+  const [stage, setStage] = useState(0);
+  const [failed, setFailed] = useState(false);
+  const reduced = prefersReducedMotion();
+  const staticMode = reduced || failed;
+  const count = TOUR.stages.length;
+
+  useEffect(() => {
+    if (staticMode) return undefined;
+    const wrap = wrapRef.current;
+    const video = videoRef.current;
+    if (!wrap || !video) return undefined;
+    let raf = 0;
+    let target = 0;
+    let shown = 0;
+
+    const progress = () => {
+      const r = wrap.getBoundingClientRect();
+      const total = Math.max(r.height - window.innerHeight, 1);
+      return Math.min(1, Math.max(0, -r.top / total));
+    };
+    const tick = () => {
+      raf = 0;
+      shown += (target - shown) * 0.18;
+      if (Math.abs(target - shown) < 0.0008) shown = target;
+      if (video.duration && Number.isFinite(video.duration)) {
+        video.currentTime = shown * Math.max(video.duration - 0.05, 0);
+      }
+      wrap.style.setProperty('--p', shown.toFixed(4));
+      let idx = 0;
+      TOUR.stages.forEach((st, i) => { if (target >= st.at) idx = i; });
+      setStage((prev) => (prev === idx ? prev : idx));
+      if (shown !== target) raf = requestAnimationFrame(tick);
+    };
+    const onScroll = () => {
+      target = progress();
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    video.addEventListener('loadedmetadata', onScroll);
+    onScroll();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      video.removeEventListener('loadedmetadata', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [staticMode, count]);
+
+  const jump = (i) => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const total = wrap.offsetHeight - window.innerHeight;
+    const top = wrap.getBoundingClientRect().top + window.scrollY;
+    const from = TOUR.stages[i].at;
+    const to = i + 1 < count ? TOUR.stages[i + 1].at : 1;
+    window.scrollTo({ top: top + total * ((from + to) / 2), behavior: 'smooth' });
+  };
+
+  const renderStage = (s, i) => (
+    <div key={s.kicker} className="tour__stage" data-active={staticMode || stage === i}>
+      <div className="eyebrow tour__kicker">{s.kicker}</div>
+      <h2 className="tour__title">{s.title}</h2>
+      {s.body && <p className="tour__body">{s.body}</p>}
+      {s.chips && (
+        <ul className="tour__chips">
+          {s.chips.map((c) => <li key={c}>{c}</li>)}
+        </ul>
+      )}
+      {s.files && (
+        <ul className="tour__files">
+          {s.files.map((id) => {
+            const a = ACHIEVEMENTS.find((x) => x.id === id);
+            return a ? (
+              <li key={id}><em>{a.caseNo}</em><strong>{a.stat}</strong><span>{a.title}</span></li>
+            ) : null;
+          })}
+        </ul>
+      )}
+      {s.cta && (
+        <div className="tour__cta">
+          <a className="btn btn--solid" href={`mailto:${CONTACT.email}`}>Email me</a>
+          <a className="btn btn--ghost" href="#credentials">See credentials</a>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <section id="inside" className={`tour ${staticMode ? 'tour--static' : ''}`} ref={wrapRef} aria-label="Scroll-through tour of my work">
+      <div className="tour__pin">
+        <div className="tour__media">
+          {!staticMode && (
+            <video
+              ref={videoRef}
+              className="tour__video"
+              src={TOUR.src}
+              poster={TOUR.poster}
+              muted
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              onError={() => setFailed(true)}
+            />
+          )}
+          {staticMode && <img className="tour__video" src={TOUR.poster} alt="" />}
+        </div>
+        {!staticMode && (
+          <>
+            <div className="tour__hint eyebrow" data-hidden={stage > 0}>{TOUR.eyebrow} <span aria-hidden="true">↓</span></div>
+            <div className="tour__bar" aria-hidden="true"><i /></div>
+            <nav className="tour__dots" aria-label="Tour stages">
+              {TOUR.stages.map((s, i) => (
+                <button key={s.kicker} type="button" data-on={stage === i} aria-label={s.kicker} onClick={() => jump(i)} />
+              ))}
+            </nav>
+          </>
+        )}
+        <div className="tour__stages">{TOUR.stages.map(renderStage)}</div>
+      </div>
+    </section>
+  );
+}
+
 export default function Dossier() {
   return (
     <div className="dossier-root">
       <Masthead />
       <main>
         <Hero />
+        <ScrollTour />
         <Credentials />
         <Summary />
         <ExperienceSection />

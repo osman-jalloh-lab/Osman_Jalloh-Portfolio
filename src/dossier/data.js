@@ -140,6 +140,7 @@ export const COMPETENCIES = [
   { title: 'IT Operations', tone: 2, tags: ['Tier 1/2 Support', 'Active Directory', 'M365', 'Endpoint Mgmt'] },
   { title: 'AI & Automation', tone: 3, tags: ['Claude API', 'Claude Code', 'ChatGPT', 'Power Automate', 'GitHub Actions'] },
   { title: 'Building', tone: 4, tags: ['React', 'Next.js', 'Node.js', 'Prisma', 'Vercel', 'Python'] },
+  { title: 'Design & Creative', tone: 1, tags: ['UX Design', 'UI Design', 'Higgsfield', 'AI Video'] },
 ];
 
 export const PROJECTS = [
@@ -230,6 +231,10 @@ const SKILL_META = {
   'Prisma': ['Pr', 3],
   'Vercel': ['Vc', 4],
   'Python': ['Py', 3],
+  'UX Design': ['Ux', 4],
+  'UI Design': ['Ui', 4],
+  'Higgsfield': ['Hf', 4],
+  'AI Video': ['Av', 3],
 };
 
 export const SKILL_ELEMENTS = COMPETENCIES.flatMap((group) =>
@@ -317,4 +322,41 @@ export const UI_COPY = {
     next: 'Next case file',
     region: 'Achievements, scroll sideways',
   },
+};
+
+/* ── scroll-through tour (Higgsfield fly-through video) ─────────────
+   Scroll position scrubs the video. If the file is missing, the tour
+   falls back to a stacked, static layout using the poster. */
+export const TOUR = {
+  src: '/video/inside.mp4',
+  poster: '/photo/osman-portrait.jpg',
+  eyebrow: 'Scroll to go inside',
+  stages: [
+    {
+      at: 0,
+      kicker: '01 / The person',
+      title: 'Osman Jalloh',
+      body: 'Security and compliance professional in Austin, TX. I hold federal deadlines and automate the parts that should not depend on memory.',
+    },
+    {
+      at: 0.25,
+      kicker: '02 / The mind',
+      title: 'How I think',
+      body: 'Controls first, evidence second, deadlines always. Risk mapped to NIST 800-53, compliance turned into systems people can actually follow.',
+      chips: ['NIST 800-53', 'Risk Assessment', 'Form I-9', 'E-Verify', 'Python'],
+    },
+    {
+      at: 0.6,
+      kicker: '03 / The work',
+      title: 'Case files',
+      files: ['develop-u', 'i9-hub', 'sec-cysa'],
+    },
+    {
+      at: 0.88,
+      kicker: '04 / Next',
+      title: 'Let\u2019s work together',
+      body: 'Open to GRC, security, and IT operations roles. Long term, GRC consulting for small businesses and nonprofits.',
+      cta: true,
+    },
+  ],
 };
