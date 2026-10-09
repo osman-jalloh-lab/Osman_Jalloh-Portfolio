@@ -318,3 +318,36 @@ export const UI_COPY = {
     region: 'Achievements, scroll sideways',
   },
 };
+
+/* ── scroll-through tour (Higgsfield fly-through video) ─────────────
+   Scroll position scrubs the video. If the file is missing, the tour
+   falls back to a stacked, static layout using the poster. */
+export const TOUR = {
+  src: '/video/inside.mp4',
+  poster: '/photo/osman-portrait.jpg',
+  eyebrow: 'Scroll to go inside',
+  stages: [
+    {
+      kicker: '01 / The person',
+      title: 'Osman Jalloh',
+      body: 'Security and compliance professional in Austin, TX. I hold federal deadlines and automate the parts that should not depend on memory.',
+    },
+    {
+      kicker: '02 / The mind',
+      title: 'How I think',
+      body: 'Controls first, evidence second, deadlines always. Risk mapped to NIST 800-53, compliance turned into systems people can actually follow.',
+      chips: ['NIST 800-53', 'Risk Assessment', 'Form I-9', 'E-Verify', 'Python'],
+    },
+    {
+      kicker: '03 / The work',
+      title: 'Case files',
+      files: ['develop-u', 'i9-hub', 'sec-cysa'],
+    },
+    {
+      kicker: '04 / Next',
+      title: 'Let\u2019s work together',
+      body: 'Open to GRC, security, and IT operations roles. Long term, GRC consulting for small businesses and nonprofits.',
+      cta: true,
+    },
+  ],
+};
