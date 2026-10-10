@@ -7,7 +7,7 @@ export const CONTACT = {
   schoolEmail: 'osman.jalloh@g.austincc.edu',
   phone: '737-704-4182',
   location: 'Austin, TX',
-  linkedin: 'https://linkedin.com/in/osmanjalloh',
+  linkedin: 'https://www.linkedin.com/in/osman-jalloh5858',
   github: 'https://github.com/osman-jalloh-lab',
 };
 
